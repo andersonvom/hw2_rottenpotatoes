@@ -43,6 +43,35 @@ describe MoviesController do
       end
     end
 
+    it "should have a form to filter by rating" do
+      get :index
+      ratings = ['G','PG','PG-13','R']
+      assigns(:all_ratings).should == ratings
+      ratings.each do |r|
+        response.should have_selector 'input', :id => "ratings_#{r}"
+      end
+    end
+
+    it "should have a submit button for ratings filter" do
+      get :index
+      response.should have_selector 'input[type=submit]', :id => 'ratings_submit'
+    end
+
+    it "should check the correct boxes according to filter" do
+      get :index, :ratings=>{"G"=>"1", "R"=>"1"}
+      response.should have_selector 'form input#ratings_G', :checked => 'checked'
+      response.should have_selector 'form input#ratings_R', :checked => 'checked'
+      response.should_not have_selector 'form input#ratings_PG', :checked => 'checked'
+    end
+
+    it "should be able to filter and order the movies" do
+      get :index, :ratings=>{"G"=>"1", "R"=>"1"}
+      click_link "Movie Title"
+      assigns(:movies).order_clauses.should == 'title'
+      response.should have_selector 'form input#ratings_G', :checked => 'checked'
+      response.should have_selector 'form input#ratings_R', :checked => 'checked'
+    end
+
   end
 
 end
