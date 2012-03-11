@@ -7,7 +7,9 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @column_name = Movie.attribute_names.clone.delete params[:order_by]
+    @hilite = { @column_name => 'hilite' }
+    @movies = Movie.order(@column_name)
   end
 
   def new
