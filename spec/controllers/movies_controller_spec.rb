@@ -20,10 +20,18 @@ describe MoviesController do
       end
     end
 
-    it "should have the correct header elements" do
+    it "should have the correct title header" do
       get :index
       response.should have_selector 'a', :id => 'title_header'
+    end
+
+    it "should have the correct release_date header" do
+      get :index
       response.should have_selector 'a', :id => 'release_date_header'
+    end
+
+    it "should have the correct table element" do
+      get :index
       response.should have_selector 'table', :id => 'movies' 
     end
 
