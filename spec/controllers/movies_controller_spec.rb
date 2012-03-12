@@ -65,9 +65,8 @@ describe MoviesController do
     end
 
     it "should be able to filter and order the movies" do
-      get :index, :ratings=>{"G"=>"1", "R"=>"1"}
-      click_link "Movie Title"
-      assigns(:movies).order_clauses.should == 'title'
+      get :index, :ratings=>{"G"=>"1", "R"=>"1"}, :order_by => 'title'
+      assigns(:movies).order_clauses.should == ['title']
       response.should have_selector 'form input#ratings_G', :checked => 'checked'
       response.should have_selector 'form input#ratings_R', :checked => 'checked'
     end
