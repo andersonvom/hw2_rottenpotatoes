@@ -7,6 +7,14 @@ class MoviesController < ApplicationController
   end
 
   def index
+    redirect_options = Hash.new
+    session.delete(:ratings) if params[:ratings].blank? and not params[:commit].blank?
+    [:order_by, :ratings].each do |opt|
+      redirect_options.store opt, session[opt] if not session[opt].blank? and params[opt].blank?
+      session[opt] = params[opt] unless params[opt].blank?
+    end
+    redirect_to movies_path(redirect_options.merge params) unless redirect_options.blank?
+
     @params = params
     @params[:ratings] ||= {}
     @column_name = Movie.attribute_names.clone.delete params[:order_by]
