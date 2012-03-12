@@ -1,0 +1,7 @@
+= form_tag movies_path(:order_by => @params[:order_by]), :method => :get do
+  Include:
+  - @all_ratings.each do |rating|
+    = rating
+    = check_box_tag "ratings[#{rating}]", 1, @params[:ratings][rating]
+  = submit_tag 'Refresh', :id => 'ratings_submit'
+

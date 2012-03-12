@@ -7,9 +7,13 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @params = params
+    @params[:ratings] ||= {}
     @column_name = Movie.attribute_names.clone.delete params[:order_by]
     @hilite = { @column_name => 'hilite' }
+    @all_ratings = Movie.ratings
     @movies = Movie.order(@column_name)
+    @movies = @movies.where(:rating => params[:ratings].keys) unless params[:ratings].blank?
   end
 
   def new
